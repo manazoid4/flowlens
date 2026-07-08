@@ -1,0 +1,9 @@
+{
+  "name": "@flowlens/extension",
+  "version": "0.1.0",
+  "private": true,
+  "description": "FlowLens browser capture shell (Chrome/Edge MV3) — contracts-only in this build, see NEXT_STEPS.md",
+  "scripts": {
+    "note": "echo 'This app is a shell. See NEXT_STEPS.md before implementing.'"
+  }
+}

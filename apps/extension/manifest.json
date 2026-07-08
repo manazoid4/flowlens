@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "FlowLens Capture",
+  "version": "0.1.0",
+  "description": "Capture browser workflows for FlowLens — workflow evidence and process intelligence.",
+  "action": { "default_title": "FlowLens Capture" },
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": ["<all_urls>"],
+  "background": { "service_worker": "background.js", "type": "module" },
+  "icons": {}
+}

@@ -89,7 +89,7 @@ export default function Home() {
         <section className="border-b border-[var(--card-border)] px-6 py-20">
           <div className="mx-auto max-w-5xl">
             <h2 className="text-center text-2xl font-semibold sm:text-3xl">
-              Your best process knowledge is trapped in people's heads and forgotten video links
+              Your best process knowledge is trapped in people&apos;s heads and forgotten video links
             </h2>
             <div className="mt-10 grid gap-6 sm:grid-cols-3">
               {[
@@ -152,7 +152,7 @@ export default function Home() {
               <h2 className="mt-4 text-2xl font-semibold sm:text-3xl">Ask what happened. Get a diagnosis, not a transcript.</h2>
               <p className="mt-4 text-[var(--muted)]">
                 For every capture, FlowLens answers: what was attempted, did it succeed, where the
-                friction is, what's automatable, what's risky or needs redaction, and what this
+                friction is, what&apos;s automatable, what&apos;s risky or needs redaction, and what this
                 capture should become next.
               </p>
               <ul className="mt-6 space-y-3 text-sm">

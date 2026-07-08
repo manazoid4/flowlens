@@ -1,6 +1,11 @@
-# FlowLens — NEXT_RUN
+﻿# FlowLens â€” NEXT_RUN
 
-Populated by scripts/agent/schedule-resume.ps1. Placeholder until first run of that script.
+Computed: 2026-07-08 13:59:12
+Suggested resume time: 2026-07-08 19:04:12
 
-Suggested resume time: 2026-07-08 + 5h05m (run schedule-resume.ps1 to compute exact time and
-attempt to register a Windows Scheduled Task named FlowLens-Claude-Resume).
+## Resume command
+claude found at: C:\Users\manaz\.local\bin\claude.exe
+
+Suggested resume command (run from C:\Users\manaz\Desktop\flowlens):
+
+```\nclaude "Read .agent-state/RESUME_PROMPT.md and continue the FlowLens build from there."\n```\n

@@ -27,3 +27,25 @@ Decision: apps/desktop (Tauri) and apps/extension (MV3) contain manifest/config 
 capture contracts + a NEXT_STEPS.md each, no working native capture code yet.
 Consequence: real capture only works via demo/seed data in apps/web for now.
 Reversal condition: future session implements real capture per each app's NEXT_STEPS.md.
+
+## D005 — 2026-07-08 — Vercel deploy runs from repo root, not apps/web
+Context: npm workspaces mean apps/web depends on packages/* via workspace protocol; running
+`vercel` from inside apps/web only uploads that directory and fails on `@flowlens/*` 404s.
+Decision: `.vercel/project.json` lives at the repo root; all `vercel` commands must be run
+from there. Documented in docs/deploy/vercel.md.
+Consequence: future sessions must `cd` to repo root before any vercel command.
+Reversal condition: none expected; this is the correct pattern for npm-workspace monorepos.
+
+## D006 — 2026-07-08 (session 2) — CI Node version is 22, not 20
+Context: PR #1's GitHub Actions `build` check was failing on every run. Root cause: (a)
+package-lock.json was stale (missing @flowlens/desktop/extension workspace entries added in
+a later commit), so `npm ci` errored with EUSAGE; (b) separately, `@supabase/*@2.110.1`
+declares `engines.node >= 22`, but ci.yml pinned Node 20, producing EBADENGINE warnings.
+Decision: regenerate package-lock.json from a clean install (verified via `rm -rf
+node_modules && npm ci` matching CI exactly), and bump `ci.yml`'s node-version to 22.
+Consequence: local dev and CI should both use Node >=22 going forward; any new workspace
+package added under apps/* or packages/* must be followed by `npm install` at the repo root
+(not just `npm ci`) before committing, so the lockfile stays in sync — `npm ci` will not add
+new workspace entries, only `npm install` will.
+Reversal condition: none expected. If Supabase deps are ever downgraded/removed such that
+the >=22 requirement goes away, Node 20 could be restored, but there's no reason to do so.
