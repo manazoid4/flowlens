@@ -1,6 +1,23 @@
 # FlowLens — HANDOFF
 
-Last updated: 2026-07-08, session 2 (CI fixed + confirmed green; MVP scope complete)
+Last updated: 2026-07-08, session 3 (verification-only run; MVP scope complete, PR #1 merged)
+
+## Current status (session 3 addendum — read this first, then earlier sessions' records below)
+PR #1 was merged into master (commit `31bf5ca`) sometime before this session started — no
+session recorded doing the merge itself; it may have been done manually or by a prior run not
+reflected in these docs. This session found TODO.md's phases 0-8 all checked complete, with
+only optional/non-blocking backlog items remaining, so per the routine's "don't do make-work
+if already complete" instruction, it ran a verification-only pass: fresh `npm install`,
+`npm run build`, `npm run lint`, `npx vitest run`, and a clean-room `npm ci` matching CI
+exactly — all PASS, zero drift from what's committed. Also confirmed via the GitHub Actions
+API that the CI run triggered by the merge commit itself (run `28957352682`) completed with
+`conclusion: success`, so master is genuinely green, not just the now-closed PR branch.
+No product code changes were made. A local `feature/flowlens-mvp` branch was recreated from
+`origin/master` (the previous one is now an ancestor of master) solely to carry this session's
+doc-only checkpoint commit, per the "PR already merged -> restart branch from latest master"
+convention — a new PR will be opened for it, distinct from the merged/closed PR #1.
+MVP status is unchanged: complete. The next-session backlog in the "Not done" list below
+(session 1 numbering) is still accurate except item 10 ("merge PR #1") is now done.
 
 ## Current status (session 2 addendum — read this first, then session 1's record below)
 Session 1's MVP build stands as described below — verified again this session (fresh

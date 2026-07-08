@@ -1,6 +1,6 @@
 # FlowLens — STATE
 
-Last updated: 2026-07-08 (session 2, CI fixed + verified green; MVP scope complete)
+Last updated: 2026-07-08 (session 3, verification-only run; MVP scope complete, PR #1 merged)
 
 ## Mission
 Build FlowLens: a "Workflow Evidence & Process Intelligence Platform" — capture messy work,
@@ -12,7 +12,9 @@ MAZos/OpenFlowKit/etc.
 Local path (session 2): /home/user/flowlens (remote container). Prior session's local path
 was C:\Users\manaz\Desktop\flowlens — different machine, same GitHub remote.
 GitHub: https://github.com/manazoid4/flowlens (public)
-Branch: feature/flowlens-mvp (PR #1 open against master, mergeable_state: clean)
+Branch: PR #1 (feature/flowlens-mvp -> master) was merged 2026-07-08 (commit 31bf5ca).
+master is now the up-to-date branch. Session 3 recreated a local feature/flowlens-mvp
+branch from master (per convention) to hold this checkpoint's doc-only commit.
 Vercel: linked at repo root, production deploy verified live in session 1 (200 OK on all key
 routes) — not re-verified in session 2 (no Vercel CLI/credentials in this container).
 
@@ -26,9 +28,16 @@ Session 2 found and fixed a real gap: session 1's TODO/HANDOFF claimed CI was "d
 only run build/lint/test locally — GitHub Actions itself was failing on every push (lockfile
 out of sync + Node engine mismatch). Fixed, pushed, and confirmed CI now green (see RUNLOG).
 
+PR #1 has since been merged into master (commit 31bf5ca). Session 3 was a verification-only
+run: re-ran the full check suite against the merged master (npm install, build, lint, vitest,
+and a clean `npm ci` matching CI exactly) — all pass, no regressions, no drift in
+package-lock.json. Confirmed via GitHub Actions API that the CI run triggered by the merge
+commit itself (run 28957352682) completed with conclusion "success".
+
 Remaining: only the previously-identified optional next-session deepening work (Stripe, live
 Supabase, live AI provider, real desktop/extension capture, remaining integrations/export
-formats, PR #1 merge) — none of it required for MVP-complete per TODO.md's phases.
+formats) — none of it required for MVP-complete per TODO.md's phases. The PR #1 merge backlog
+item is now done.
 
 ## Key decisions
 See DECISIONS.md (D001-D006).
@@ -47,6 +56,10 @@ Reversal condition: none expected; this is the correct pattern for npm-workspace
 - .github/workflows/ci.yml (node-version 20 -> 22)
 - .agent-state/{RUNLOG,STATE,TODO,HANDOFF,DECISIONS}.md (this checkpoint)
 
+## Files changed (session 3)
+- .agent-state/{RUNLOG,STATE,TODO,HANDOFF}.md only (verification-only session, no product
+  code changes — DECISIONS.md untouched, no new durable decision made)
+
 Prior session's files: everything else under the repo except .git internals — see git log
 (6 commits on feature/flowlens-mvp: bootstrap, pages, vercel-fix, docs+shells+tests+CI,
 sales/growth/playbooks, session-2 CI fix).
@@ -55,9 +68,26 @@ sales/growth/playbooks, session-2 CI fix).
 None. Open follow-ups are tracked as ranked next-session tasks in HANDOFF.md, not blockers.
 
 ## Next action
-Send the session status email via Resend to manazoid4@gmail.com, then stop for this session.
-After that: no required next action — MVP scope is complete and CI-green. Optional deepening
-work is ranked in HANDOFF.md if a future session wants to continue.
+Session 3's build-routine work and status email are both done (Resend id
+a5d0d4eb-1a39-44be-8b24-a32d718471d6). A new PR #2 (docs-only checkpoint,
+https://github.com/manazoid4/flowlens/pull/2) is open and subscribed for activity;
+a self check-in is scheduled ~5 min out to confirm CI goes green, then hourly until
+merged/closed. No other required next action — MVP scope is complete, PR #1 is
+merged, and CI is green on master. Optional deepening work is ranked in HANDOFF.md
+if a future session wants to continue.
+
+## Verification status (session 3, this container)
+- `git fetch origin master` -> HEAD (detached, then feature/flowlens-mvp recreated from it)
+  matches origin/master tip 31bf5ca (the PR #1 merge commit).
+- `npm install` (root): PASS (431 packages)
+- `npm run build`: PASS (42 static pages via Turbopack)
+- `npm run lint`: PASS (0 errors)
+- `npx vitest run` (apps/web): PASS (5/5 tests)
+- `rm -rf node_modules && npm ci`: PASS, `git status` clean afterward (no lockfile drift)
+- GitHub Actions on master (run 28957352682, triggered by the merge commit): conclusion
+  "success"
+- No code changes were necessary this session — this was a pure verification pass per the
+  scheduled routine's "if TODO shows fully complete, do not do make-work" instruction.
 
 ## Verification status (session 2, this container)
 - `npm install` (root): PASS
