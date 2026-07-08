@@ -76,9 +76,15 @@ Markers: [ ] not started, [~] in progress, [x] done+verified, [!] blocked, [?] n
 - [x] Session 2: HANDOFF/STATE/RUNLOG/TODO/DECISIONS updated; completion email sent via
       Resend (id cf36e78a-8057-488c-b437-e5a8534d31b7)
 
+## Session 3 — Verification-only run (2026-07-08)
+- [x] PR #1 confirmed merged into master (commit 31bf5ca) — was already merged before this
+      session started, no action needed
+- [x] Re-verified full check suite against merged master: npm install, build, lint, vitest,
+      clean `npm ci` — all PASS, no drift
+- [x] Confirmed GitHub Actions run on the merge commit itself succeeded (run 28957352682)
+
 ## Next-session backlog (see HANDOFF.md for the ranked, detailed version) — all optional,
 ## none blocking "MVP complete" status
-- [ ] Merge PR #1 into master (CI is green; just needs a human/agent merge decision)
 - [ ] Stripe checkout + webhook wiring
 - [ ] Real Supabase queries replacing demo-data.ts
 - [ ] apps/desktop real Tauri capture implementation
