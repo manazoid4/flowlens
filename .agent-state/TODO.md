@@ -73,7 +73,8 @@ Markers: [ ] not started, [~] in progress, [x] done+verified, [!] blocked, [?] n
       record found in this container; session 2 sends its own status email regardless)
 - [x] Session 2: CI fix (lockfile sync + Node 22) — committed `8eb9a78`, pushed, confirmed
       GitHub Actions green on PR #1, PR mergeable_state now "clean"
-- [~] Session 2: HANDOFF/STATE/RUNLOG/TODO/DECISIONS updated; completion email sending next
+- [x] Session 2: HANDOFF/STATE/RUNLOG/TODO/DECISIONS updated; completion email sent via
+      Resend (id cf36e78a-8057-488c-b437-e5a8534d31b7)
 
 ## Next-session backlog (see HANDOFF.md for the ranked, detailed version) — all optional,
 ## none blocking "MVP complete" status
