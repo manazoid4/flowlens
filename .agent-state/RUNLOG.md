@@ -13,3 +13,39 @@ Append-only timestamped log of actions, commands, and outputs.
   product,design,growth,playbooks,sales,deploy}, .agent-state, scripts/agent
 - 09:02 `git init` in C:\Users\manaz\Desktop\flowlens -> initialized empty repo
 - 09:03 Writing .agent-state/* scaffolding files (this file included)
+
+## 2026-07-08 — Session 2 (scheduled routine, remote container, repo at /home/user/flowlens)
+
+- Read .agent-state/{STATE,TODO,DECISIONS,HANDOFF}.md on `master` — found them stale/early
+  (pre-bootstrap). `git log` showed one bootstrap commit on master but a much further-ahead
+  `feature/flowlens-mvp` branch existed on `origin` (5 commits, TODO/HANDOFF/STATE there
+  describe a "substantially complete" MVP). Checked out `feature/flowlens-mvp` and re-read
+  state docs from there instead — this is the actual working branch.
+- `npm install` at repo root -> succeeded (422 packages).
+- `npm run build` (root, runs apps/web build) -> PASS, 20 static pages generated via Turbopack.
+- `npm run lint` -> PASS, 0 errors.
+- `cd apps/web && npx vitest run` -> PASS, 5/5 tests.
+- Local `package-lock.json` picked up a 153-line diff from `npm install` (npm 10.9.7 here vs
+  npm 11.x used previously — just `libc` metadata noise on optional deps). Discarded via
+  `git checkout -- package-lock.json`, not a real change.
+- Checked PR #1 (feature/flowlens-mvp -> master) via GitHub MCP: open, mergeable_state
+  "unstable". `get_check_runs` showed both `build` CI checks **failing** — this contradicts
+  the previous session's HANDOFF/TODO claim that CI was verified passing (it had only been
+  verified locally, never confirmed green on GitHub Actions itself).
+- Pulled failing job logs (`get_job_logs`): `npm ci` errored with EUSAGE — package-lock.json
+  was out of sync, missing `@flowlens/desktop@0.1.0` and `@flowlens/extension@0.1.0` workspace
+  entries (those packages were added after the lockfile was last generated for `npm ci`
+  purposes). Also noted (non-fatal but real) EBADENGINE warnings: `@supabase/*@2.110.1`
+  require Node >=22, but `.github/workflows/ci.yml` pinned `node-version: 20`.
+- Fix: `rm -rf node_modules apps/*/node_modules packages/*/node_modules && npm install` at
+  root regenerated package-lock.json with the two missing workspace entries (16 insertions,
+  153 deletions net vs. HEAD's lockfile). Verified fix by simulating CI exactly:
+  `rm -rf node_modules ... && npm ci` -> succeeded (431 packages, 0 EUSAGE errors).
+  Re-ran `npm run lint`, `npm run build`, `npx vitest run` post-`npm ci` -> all PASS.
+- Bumped `.github/workflows/ci.yml` `node-version: 20` -> `22` to match the Supabase package
+  engine requirement and eliminate the EBADENGINE warnings.
+- Committed both fixes (`8eb9a78`) to `feature/flowlens-mvp` and pushed. Polled PR #1 check
+  runs via `get_check_runs` until the new run completed: both `build` checks -> "completed" /
+  "success" (run 28953770454, 28953767439, ~33s each). Re-fetched PR #1 -> `mergeable_state`
+  changed from "unstable" to "clean". CI on this branch is now genuinely green, not just
+  locally verified.

@@ -1,8 +1,25 @@
 # FlowLens — HANDOFF
 
-Last updated: 2026-07-08, session 1 (substantially complete)
+Last updated: 2026-07-08, session 2 (CI fixed + confirmed green; MVP scope complete)
 
-## Current status
+## Current status (session 2 addendum — read this first, then session 1's record below)
+Session 1's MVP build stands as described below — verified again this session (fresh
+container, `npm install`/`build`/`lint`/`vitest` all still pass). The one thing session 1
+got wrong: it marked GitHub Actions CI "done" based on local verification only. GitHub
+Actions itself was actually failing on every push to PR #1 (`npm ci` EUSAGE — lockfile
+missing @flowlens/desktop/@flowlens/extension entries — plus a Node 20 vs. Supabase's
+required >=22 engine mismatch). Session 2 fixed both, verified the fix by running the exact
+CI command (`rm -rf node_modules && npm ci`) locally, pushed commit `8eb9a78`, and confirmed
+on GitHub that both `build` checks now complete with `success` and PR #1's mergeable_state
+is `clean`. See RUNLOG.md session-2 section and DECISIONS.md D006 for full detail.
+No other code changes were made this session — everything else in the "Done" list below was
+re-verified, not re-built.
+PR: https://github.com/manazoid4/flowlens/pull/1 (feature/flowlens-mvp -> master, open, CI
+green, mergeable_state clean, not yet merged).
+
+## Session 1 record (verbatim, for history)
+
+### Current status
 Working MVP built, tested, pushed to GitHub, deployed to Vercel, and verified live.
 PR open: https://github.com/manazoid4/flowlens/pull/1 (feature/flowlens-mvp -> master).
 
