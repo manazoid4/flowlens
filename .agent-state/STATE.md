@@ -68,10 +68,13 @@ sales/growth/playbooks, session-2 CI fix).
 None. Open follow-ups are tracked as ranked next-session tasks in HANDOFF.md, not blockers.
 
 ## Next action
-Send the session status email via Resend to manazoid4@gmail.com, then stop for this session.
-After that: no required next action — MVP scope is complete, PR #1 is merged, and CI is green
-on master. Optional deepening work is ranked in HANDOFF.md if a future session wants to
-continue.
+Session 3's build-routine work and status email are both done (Resend id
+a5d0d4eb-1a39-44be-8b24-a32d718471d6). A new PR #2 (docs-only checkpoint,
+https://github.com/manazoid4/flowlens/pull/2) is open and subscribed for activity;
+a self check-in is scheduled ~5 min out to confirm CI goes green, then hourly until
+merged/closed. No other required next action — MVP scope is complete, PR #1 is
+merged, and CI is green on master. Optional deepening work is ranked in HANDOFF.md
+if a future session wants to continue.
 
 ## Verification status (session 3, this container)
 - `git fetch origin master` -> HEAD (detached, then feature/flowlens-mvp recreated from it)
