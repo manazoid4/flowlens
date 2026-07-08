@@ -27,3 +27,11 @@ Decision: apps/desktop (Tauri) and apps/extension (MV3) contain manifest/config 
 capture contracts + a NEXT_STEPS.md each, no working native capture code yet.
 Consequence: real capture only works via demo/seed data in apps/web for now.
 Reversal condition: future session implements real capture per each app's NEXT_STEPS.md.
+
+## D005 — 2026-07-08 — Vercel deploy runs from repo root, not apps/web
+Context: npm workspaces mean apps/web depends on packages/* via workspace protocol; running
+`vercel` from inside apps/web only uploads that directory and fails on `@flowlens/*` 404s.
+Decision: `.vercel/project.json` lives at the repo root; all `vercel` commands must be run
+from there. Documented in docs/deploy/vercel.md.
+Consequence: future sessions must `cd` to repo root before any vercel command.
+Reversal condition: none expected; this is the correct pattern for npm-workspace monorepos.
