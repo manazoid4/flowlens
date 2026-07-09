@@ -96,3 +96,35 @@ Append-only timestamped log of actions, commands, and outputs.
   only as a shell variable, never written to any file.
 - Session's build-routine work is complete. Remaining open item: babysit PR #2 to green/merge
   per its activity subscription (separate from the build routine's own completion).
+
+## 2026-07-09 — Session 4 (scheduled routine, remote container, repo at /home/user/flowlens)
+
+- Read .agent-state/{STATE,TODO,DECISIONS,HANDOFF}.md. TODO.md shows all of phases 0-8 checked
+  `[x]`; only the optional, explicitly-non-blocking backlog remains (Stripe, live Supabase,
+  desktop/extension real capture, live AI provider, remaining export formats/competitors,
+  RLS tightening, Playwright). Per the routine's "if already complete, don't do make-work"
+  instruction, this is a verify-and-report-only run.
+- `git status` at start showed HEAD detached at `e65a38f` ("Merge pull request #2"); `git
+  fetch origin master` confirmed `origin/master` tip is also `e65a38f` — PR #2 (opened by
+  session 3) has since been merged. Confirmed via GitHub MCP `list_pull_requests` (state=all):
+  both PR #1 and PR #2 show `merged: true`, no open PRs remain.
+- GitHub MCP `actions_list` (list_workflow_runs, branch=master) -> most recent run
+  (28976963747, triggered by the PR #2 merge commit) has `status: completed`,
+  `conclusion: success`. CI is green on the current master tip.
+- Recreated local `feature/flowlens-mvp` from `origin/master` (old branch tip is now an
+  ancestor of master, same convention as session 3) to hold this checkpoint's doc-only commit.
+- Fresh verification suite, this container, Node v22.22.2 / npm 10.9.7:
+  - `npm install` (root) -> PASS, 431 packages, `git status --short` clean afterward (no
+    lockfile drift).
+  - `npm run build` -> PASS, all app routes generated (static + SSG dynamic routes for
+    captures/[id] x3 variants, compare/[slug], solutions/[slug]), no errors.
+  - `npm run lint` -> PASS, 0 errors.
+  - `cd apps/web && npx vitest run` -> PASS, 5/5 tests (friction-scoring.test.ts).
+- No code changes were necessary. Updated .agent-state/{STATE,TODO,RUNLOG,HANDOFF}.md to
+  record this verification pass. DECISIONS.md left untouched — no new durable decision.
+- `npm install` reported 7 pre-existing npm audit advisories (5 moderate, 1 high, 1 critical)
+  in transitive deps — same as prior sessions would have seen (not introduced this session,
+  not investigated further; not a TODO blocker, noted here for visibility only).
+- Committed this checkpoint on `feature/flowlens-mvp`, pushed, opened PR (docs-only, since
+  PR #1 and PR #2 are both merged and can't be reused), subscribed to its activity.
+- Sending session status email via Resend API next.

@@ -1,6 +1,24 @@
 # FlowLens — HANDOFF
 
-Last updated: 2026-07-08, session 3 (verification-only run; MVP scope complete, PR #1 merged)
+Last updated: 2026-07-09, session 4 (verification-only run; MVP scope complete, PR #1 and #2 merged)
+
+## Current status (session 4 addendum — read this first, then earlier sessions' records below)
+Found HEAD detached at `e65a38f` ("Merge pull request #2"); `git fetch origin master` confirmed
+`origin/master` is also at `e65a38f`, meaning session 3's docs-only PR #2 has been merged since
+that session ended. Confirmed via GitHub MCP that both PR #1 and PR #2 show `merged: true` and
+there are no open PRs, and that GitHub Actions on the PR #2 merge commit itself (run
+`28976963747`) completed with `conclusion: success` — master is genuinely green.
+TODO.md still shows all of phases 0-8 complete, with only the same optional/non-blocking
+backlog remaining (Stripe, live Supabase, desktop/extension real capture, live AI provider,
+remaining export formats/competitors, RLS tightening, Playwright smoke test) — so per the
+routine's "don't do make-work if already complete" instruction, this was a verify-and-report
+run: fresh `npm install`, `npm run build`, `npm run lint`, `npx vitest run` in this container —
+all PASS, zero drift from what's committed (`git status --short` clean after `npm install`).
+No product code changes were made. Recreated local `feature/flowlens-mvp` from
+`origin/master` (same "PR merged -> restart branch from latest master" convention as session 3)
+to carry this session's doc-only checkpoint commit; opened a new PR for it (distinct from the
+now-merged/closed PR #1 and PR #2) and subscribed to its activity.
+MVP status is unchanged: complete. The next-session backlog below is still accurate.
 
 ## Current status (session 3 addendum — read this first, then earlier sessions' records below)
 PR #1 was merged into master (commit `31bf5ca`) sometime before this session started — no

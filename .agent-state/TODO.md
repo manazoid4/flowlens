@@ -83,6 +83,14 @@ Markers: [ ] not started, [~] in progress, [x] done+verified, [!] blocked, [?] n
       clean `npm ci` — all PASS, no drift
 - [x] Confirmed GitHub Actions run on the merge commit itself succeeded (run 28957352682)
 
+## Session 4 — Verification-only run (2026-07-09)
+- [x] Confirmed PR #2 (session 3's checkpoint) merged into master (commit e65a38f)
+- [x] Confirmed CI green on the resulting master tip (GitHub Actions run 28976963747,
+      conclusion success)
+- [x] Re-verified full check suite in a fresh container: npm install, build, lint, vitest —
+      all PASS, no lockfile drift
+- [x] Opened this session's own docs-only checkpoint PR and subscribed to its activity
+
 ## Next-session backlog (see HANDOFF.md for the ranked, detailed version) — all optional,
 ## none blocking "MVP complete" status
 - [ ] Stripe checkout + webhook wiring
