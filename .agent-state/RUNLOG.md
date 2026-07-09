@@ -125,6 +125,14 @@ Append-only timestamped log of actions, commands, and outputs.
 - `npm install` reported 7 pre-existing npm audit advisories (5 moderate, 1 high, 1 critical)
   in transitive deps — same as prior sessions would have seen (not introduced this session,
   not investigated further; not a TODO blocker, noted here for visibility only).
-- Committed this checkpoint on `feature/flowlens-mvp`, pushed, opened PR (docs-only, since
-  PR #1 and PR #2 are both merged and can't be reused), subscribed to its activity.
-- Sending session status email via Resend API next.
+- Committed this checkpoint (`0820324`) on `feature/flowlens-mvp`, pushed, opened PR #3
+  (https://github.com/manazoid4/flowlens/pull/3, docs-only, since PR #1 and PR #2 are both
+  merged and can't be reused), subscribed to its activity.
+- PR #3 CI was still queued/in_progress at check time; scheduled a self check-in ~1 hour out
+  to confirm it goes green and to watch for review comments, per the subscription's standing
+  instruction.
+- Sent session status email via Resend API (`curl`, custom User-Agent) -> HTTP response
+  `{"id":"2da1e4de-81e6-45b7-a658-cd4d1c817a41"}`, confirming delivery accepted. Key passed
+  only as a shell variable, never written to any file.
+- Session's build-routine work is complete. Remaining open item: babysit PR #3 to green/merge
+  per its activity subscription (separate from the build routine's own completion).
