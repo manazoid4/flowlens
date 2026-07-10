@@ -1,6 +1,6 @@
 # FlowLens — STATE
 
-Last updated: 2026-07-10 (session 5, verification-only run; MVP scope complete, PR #3 open/CI-green, not yet merged)
+Last updated: 2026-07-10 (session 6, verification-only run; MVP scope complete, PR #3 open/CI-green, not yet merged — 3 sessions running)
 
 ## Mission
 Build FlowLens: a "Workflow Evidence & Process Intelligence Platform" — capture messy work,
@@ -61,9 +61,9 @@ Reversal condition: none expected; this is the correct pattern for npm-workspace
 - .agent-state/{RUNLOG,STATE,TODO,HANDOFF}.md only (verification-only session, no product
   code changes — DECISIONS.md untouched, no new durable decision made)
 
-## Files changed (session 4, session 5)
-- .agent-state/{RUNLOG,STATE,TODO,HANDOFF}.md only, both sessions (verification-only, no
-  product code changes — DECISIONS.md untouched, no new durable decision made either session)
+## Files changed (session 4, session 5, session 6)
+- .agent-state/{RUNLOG,STATE,TODO,HANDOFF}.md only, all three sessions (verification-only, no
+  product code changes — DECISIONS.md untouched, no new durable decision made any session)
 
 Prior session's files: everything else under the repo except .git internals — see git log
 (6 commits on feature/flowlens-mvp: bootstrap, pages, vercel-fix, docs+shells+tests+CI,
@@ -73,16 +73,37 @@ sales/growth/playbooks, session-2 CI fix).
 None. Open follow-ups are tracked as ranked next-session tasks in HANDOFF.md, not blockers.
 
 ## Next action
-Session 5's build-routine work and status email are both done. PR #3
-(https://github.com/manazoid4/flowlens/pull/3) is still open from session 4, CI-green (both
-`build` checks success), `mergeable_state: clean` — it has simply not been merged by anyone
-yet, same as PR #1 and PR #2 sat unmerged for a while before eventually being merged outside
-these agent sessions. This session added its checkpoint commit onto the same branch/PR rather
-than opening a new PR #4, since #3 was still open. No other required next action — MVP scope
-is complete and CI is green. If PR #3 is still open after another session or two, a future
-session should raise with the user whether these routine sessions are expected to self-merge
-docs-only checkpoint PRs, rather than continuing to assume someone else will. Optional
-deepening work is ranked in HANDOFF.md if a future session wants to continue past MVP scope.
+PR #3 is now open across THREE sessions (4, 5, 6), still CI-green and `mergeable_state:
+clean`, still unmerged. The root cause (confirmed independently by sessions 4, 5, and 6 via
+`list_triggers`) is trigger `trig_01MoN3zeUDqnnfWrQadCy35N` ("FlowLens Build Resume", cron
+`10 */5 * * *`, no `persistent_session_id`) firing a brand-new memoryless session every 5
+hours. The user was already sent a push notification about this in session 5; session 6 did
+not repeat it since nothing changed. This is a decision for the user, not something this
+routine should act on unilaterally: either (a) merge PR #3 so the next firing starts clean,
+and/or (b) disable/adjust the "FlowLens Build Resume" cron now that MVP scope is complete and
+only optional backlog remains — otherwise it will keep firing every 5 hours indefinitely.
+Optional deepening work is ranked in HANDOFF.md if a future session wants to continue past
+MVP scope.
+
+## Verification status (session 6, this container)
+- `git status` at start: HEAD detached at `e65a38f` (earlier point than session 5's container).
+  `git fetch origin master feature/flowlens-mvp` -> `origin/feature/flowlens-mvp` at `a5d839c`,
+  7 commits ahead of `origin/master` — PR #3 still open (third consecutive session to find it
+  unmerged).
+- Checked out `origin/feature/flowlens-mvp` directly (did not recreate from master).
+- `rm -rf node_modules apps/*/node_modules packages/*/node_modules && npm ci` (clean-room):
+  PASS (431 packages, 0 EUSAGE/EBADENGINE).
+- `npm run build`: PASS, all routes generated, no errors.
+- `npm run lint`: PASS (0 errors).
+- `npx vitest run` (apps/web): PASS (5/5 tests).
+- `git status --short` clean throughout — no drift.
+- GitHub MCP `get_check_runs` on PR #3's current head (`a5d839c`): both `build` checks
+  `completed`/`success`.
+- Re-confirmed via `list_triggers` that the "FlowLens Build Resume" cron is still enabled and
+  still the root cause of the repeated sessions (see Next action above). Did not send another
+  push notification (already sent in session 5, nothing new to report).
+- No code changes made — pure verification pass per the routine's "already complete, no
+  make-work" instruction.
 
 ## Verification status (session 5, this container)
 - `git status` at start: HEAD detached at `e65a38f`. `git fetch origin --prune` showed PR #3's

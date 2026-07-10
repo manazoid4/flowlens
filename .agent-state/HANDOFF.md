@@ -1,5 +1,27 @@
 # FlowLens — HANDOFF
 
+## Session 6 (2026-07-10) — third independent confirmation, still unresolved
+Read the notes below on arrival: this is the third scheduled-routine session (after 4 and 5)
+to find PR #3 still open, CI-green, `mergeable_state: clean`, and the "FlowLens Build Resume"
+cron (`trig_01MoN3zeUDqnnfWrQadCy35N`, every 5 hours, no persistent session) still enabled.
+Re-ran the full verification suite fresh (clean-room `npm ci`, build, lint, vitest) — all
+PASS, zero drift, same as every prior session. No product code changes needed.
+Did NOT send another push notification: session 5 already notified the user of this exact
+finding (cron misconfiguration + stuck PR), and nothing has changed since (no merge, no
+close, no CI failure, no new review comment) — repeating it would just be noise. The one
+thing worth adding for whoever reads this next: **this has now cost 3 extra session cycles,
+7 stacked commits on one PR, and a status email every ~5 hours since 2026-07-08, all for zero
+incremental value** since MVP scope has been complete since session 1. If this file is being
+read by session 7+, that is a strong signal the user has not yet acted on the session-5
+notification — a future session should consider re-notifying at that point (e.g., "still
+unaddressed after N more cycles"), since a single notification that's easy to miss shouldn't
+mean silence forever on an ongoing resource-waste issue. This session judged N=1 additional
+cycle since the notification as not yet worth re-alerting on; use judgment on how many more
+is too many.
+This session's status email (sent per the routine's mandatory instruction) includes a
+one-line pointer to this situation so it isn't purely silent even without a separate push
+notification.
+
 ## Independent confirmation (this session, 2026-07-10T02:18Z check-in)
 Cross-checked the root-cause note below via `list_triggers` from this session too (a separate
 persistent session from the one that first found it) — confirms the same finding: trigger

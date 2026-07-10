@@ -194,3 +194,47 @@ Append-only timestamped log of actions, commands, and outputs.
   email/notification for this check-in; already flagged the "sat open across sessions"
   pattern once this session, repeating it hourly would be noise, not signal.
 - Re-armed the next self check-in ~1 hour out.
+
+## 2026-07-10 — Session 6 (scheduled routine, remote container, repo at /home/user/flowlens)
+
+- Read .agent-state/{STATE,TODO,DECISIONS,HANDOFF,NEXT_RUN}.md. TODO.md still shows all of
+  phases 0-8 checked `[x]`; only the same optional, non-blocking backlog remains. Per the
+  routine's "if already complete, don't do make-work" instruction, this is another
+  verify-and-report-only run.
+- `git status` at start showed HEAD detached at `e65a38f` (the PR #2 merge commit — this
+  container started from an earlier point than session 5's). `git fetch origin master
+  feature/flowlens-mvp` showed `origin/feature/flowlens-mvp` at `a5d839c`, 7 commits ahead of
+  `origin/master` — confirms PR #3 is STILL open (third consecutive session to find it so).
+  Checked out `origin/feature/flowlens-mvp` directly (did not recreate from master) to
+  continue on top of sessions 4/5's commits.
+- Initially (before fetching) mislabeled a first checkpoint attempt as "session 4" based on a
+  stale read of `.agent-state/` from the detached `e65a38f` commit before realizing the real
+  branch (with sessions 4 and 5 already on it) existed on `origin`. Caught this before
+  pushing: reset the stray commit, dropped its stash, and rebuilt this session's checkpoint
+  correctly as session 6 on top of the real branch tip. No incorrect commit was pushed.
+- Fresh verification suite, this container, Node v22.22.2 / npm 10.9.7:
+  - `rm -rf node_modules apps/*/node_modules packages/*/node_modules && npm ci` (clean-room,
+    matching CI exactly) -> PASS, 431 packages, 0 EUSAGE/EBADENGINE issues.
+  - `npm run build` -> PASS, all app routes generated, no errors.
+  - `npm run lint` -> PASS, 0 errors.
+  - `cd apps/web && npx vitest run` -> PASS, 5/5 tests.
+  - `git status --short` clean throughout — no lockfile or other drift.
+  - GitHub MCP `get_check_runs` on PR #3's current head (`a5d839c`): both `build` checks
+    `completed`/`success`.
+- Independently re-confirmed (via the same `list_triggers` call sessions 4/5 used) that
+  trigger `trig_01MoN3zeUDqnnfWrQadCy35N` ("FlowLens Build Resume", cron `10 */5 * * *`,
+  `enabled: true`, no `persistent_session_id`) is still enabled and still the root cause: it
+  will keep firing every 5 hours indefinitely, each time as a brand-new memoryless session,
+  for as long as (a) the cron stays enabled and (b) PR #3 stays unmerged. This is now
+  confirmed across three separate sessions (4, 5, 6).
+- Did NOT send another push notification about this — session 5 already sent one for this
+  exact finding, and nothing new has happened since (PR #3 still open, CI still green, cron
+  still enabled). Repeating the same notification would be noise per the "silence when
+  nothing changed" principle. Instead, recorded a clear escalation note in HANDOFF.md and
+  will fold a one-line mention into the mandatory status email this run.
+- No product code changes were necessary. Updated .agent-state/{STATE,TODO,RUNLOG,HANDOFF}.md
+  to record this pass. DECISIONS.md left untouched — no new durable decision (the cron/PR
+  situation is an operational finding for the user to act on, not a product decision this
+  agent should make unilaterally).
+- Committed this checkpoint on `feature/flowlens-mvp` and pushed — adds to the existing open
+  PR #3 rather than opening a new PR #4.

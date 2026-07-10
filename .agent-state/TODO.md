@@ -99,6 +99,14 @@ Markers: [ ] not started, [~] in progress, [x] done+verified, [!] blocked, [?] n
 - [x] Continued on existing `feature/flowlens-mvp` branch (did not recreate from master,
       since PR #3 is still open) and pushed this checkpoint to the same branch/PR
 
+## Session 6 — Verification-only run (2026-07-10)
+- [x] Confirmed PR #3 still open, NOT merged, CI still green (`build` x2 success on latest
+      push) — third consecutive session to find it unmerged
+- [x] Re-verified full check suite in a fresh container: `npm ci` (clean-room), build, lint,
+      vitest — all PASS, no lockfile drift
+- [x] Did not re-send a push notification about the recurring-cron/stuck-PR finding (already
+      surfaced to the user in session 5) — see HANDOFF.md for the escalation note instead
+
 ## Next-session backlog (see HANDOFF.md for the ranked, detailed version) — all optional,
 ## none blocking "MVP complete" status
 - [ ] Stripe checkout + webhook wiring
