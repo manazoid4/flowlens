@@ -236,5 +236,11 @@ Append-only timestamped log of actions, commands, and outputs.
   to record this pass. DECISIONS.md left untouched — no new durable decision (the cron/PR
   situation is an operational finding for the user to act on, not a product decision this
   agent should make unilaterally).
-- Committed this checkpoint on `feature/flowlens-mvp` and pushed — adds to the existing open
-  PR #3 rather than opening a new PR #4.
+- Committed this checkpoint on `feature/flowlens-mvp` and pushed (`694ec91`) — adds to the
+  existing open PR #3 rather than opening a new PR #4.
+- Sent session status email via Resend API (`curl`, custom User-Agent) -> HTTP response
+  `{"id":"ae4776c1-65d6-469b-9a6c-02190680db9a"}`, confirming delivery accepted. Email body
+  includes the recurring-cron/stuck-PR situation and the recommendation to merge PR #3 and/or
+  adjust the cron cadence. Key passed only as a shell variable, never written to any file.
+- Session's build-routine work is complete. No push notification sent (session 5 already sent
+  one for this exact finding; nothing new happened this session to justify another).
