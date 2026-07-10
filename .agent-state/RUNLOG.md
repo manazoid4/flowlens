@@ -281,3 +281,10 @@ Append-only timestamped log of actions, commands, and outputs.
   and/or disable/lengthen the cron, noting either can be done on request. Did not merge the PR
   or touch the trigger config myself (both need explicit authorization, not standing routine
   authority).
+- Sent session status email via Resend API (`curl`, custom User-Agent) -> HTTP response
+  `{"id":"7e593e89-c47a-49c4-b20b-6ed7d0614a0a"}`, confirming delivery accepted. Email body
+  includes the recurring-cron/stuck-PR situation and the recommendation to merge PR #3 and/or
+  adjust the cron cadence. Key passed only as a shell variable, never written to any file.
+- Sent a PushNotification (see HANDOFF.md decision above) — this is the escalation this session
+  judged warranted after ~8h of silence since session 5's original notification.
+- Session's build-routine work is complete.
