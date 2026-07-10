@@ -1,5 +1,16 @@
 # FlowLens — HANDOFF
 
+## Independent confirmation (this session, 2026-07-10T02:18Z check-in)
+Cross-checked the root-cause note below via `list_triggers` from this session too (a separate
+persistent session from the one that first found it) — confirms the same finding: trigger
+`trig_01MoN3zeUDqnnfWrQadCy35N` ("FlowLens Build Resume", cron `10 */5 * * *`, `enabled: true`,
+no `persistent_session_id`) is the root cause of the repeated fresh-session churn. Also noticed
+there are now at least two independent persistent sessions each running their own hourly
+`send_later` check-in loop against PR #3 in parallel (one per session that opened/extended the
+PR) — redundant but harmless. Sent the user a push notification about this since it's a new,
+actionable finding (cron misconfiguration + a stuck-open PR) that this routine hadn't surfaced
+before. Did not disable the cron or merge the PR myself — both are the user's call.
+
 Last updated: 2026-07-10, session 4's 1hr self check-in (root cause of repeated sessions identified — see note below)
 
 ## Note from session 4's PR #3 check-in loop (2026-07-10T01:52Z)
