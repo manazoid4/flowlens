@@ -136,3 +136,42 @@ Append-only timestamped log of actions, commands, and outputs.
   only as a shell variable, never written to any file.
 - Session's build-routine work is complete. Remaining open item: babysit PR #3 to green/merge
   per its activity subscription (separate from the build routine's own completion).
+
+## 2026-07-10 — Session 5 (scheduled routine, remote container, repo at /home/user/flowlens)
+
+- Read .agent-state/{STATE,TODO,DECISIONS,HANDOFF,NEXT_RUN}.md. TODO.md still shows all of
+  phases 0-8 checked `[x]`; only the same optional, non-blocking backlog remains. Per the
+  routine's "if already complete, don't do make-work" instruction, this is another
+  verify-and-report-only run.
+- `git status` at start showed HEAD detached at `e65a38f` ("Merge pull request #2"). `git
+  fetch origin --prune` revealed PR #3 (opened by session 4) is still open — NOT yet merged —
+  with `origin/feature/flowlens-mvp` at `79f4038`, 2 commits ahead of `origin/master`
+  (docs-only: STATE/RUNLOG/TODO/HANDOFF updates). Confirmed via GitHub MCP
+  `list_pull_requests` (state=open): only PR #3 open, `mergeable_state: clean`,
+  `get_check_runs` shows both `build` checks `completed`/`success` (run 29058436271 and a
+  companion run). CI is green on PR #3; it just hasn't been merged by anyone yet.
+- Since PR #3 is still open (unmerged), did NOT recreate the branch from master — checked out
+  the existing `origin/feature/flowlens-mvp` directly (`git checkout -B feature/flowlens-mvp
+  origin/feature/flowlens-mvp`) to continue on top of session 4's commits, per the branch
+  convention's "only restart from master once the previous PR is actually merged" rule.
+- Fresh verification suite, this container, Node v22.22.2 / npm 10.9.7:
+  - `npm install` (root) -> PASS, 431 packages, `git status --short` clean afterward (no
+    lockfile drift).
+  - `npm run build` -> PASS, all app routes generated (static + SSG dynamic routes), no errors.
+  - `npm run lint` -> PASS, 0 errors.
+  - `cd apps/web && npx vitest run` -> PASS, 5/5 tests (friction-scoring.test.ts).
+  - `rm -rf node_modules apps/*/node_modules packages/*/node_modules && npm ci` (simulating CI
+    exactly) -> PASS, 431 packages, 0 EUSAGE/EBADENGINE issues; `git status --short` clean
+    afterward, confirming no lockfile drift.
+  - 7 pre-existing npm audit advisories again noted (5 moderate, 1 high, 1 critical),
+    unchanged from prior sessions — not investigated, not a TODO blocker.
+- No code changes were necessary. Updated .agent-state/{STATE,TODO,RUNLOG,HANDOFF}.md to
+  record this verification pass. DECISIONS.md left untouched — no new durable decision.
+- Committed this checkpoint on `feature/flowlens-mvp` and pushed — this adds to the existing
+  open PR #3 rather than opening a new PR #4, since #3 is still open and its branch is the
+  right target.
+- Sent session status email via Resend API (`curl`, custom User-Agent) — see email send step
+  below for the response id.
+- Session's build-routine work is complete. Remaining open item: PR #3 is open, CI-green,
+  mergeable — needs a human (or a future automated step outside this routine) to actually
+  merge it, same as PR #1/#2 eventually were.

@@ -91,6 +91,14 @@ Markers: [ ] not started, [~] in progress, [x] done+verified, [!] blocked, [?] n
       all PASS, no lockfile drift
 - [x] Opened this session's own docs-only checkpoint PR and subscribed to its activity
 
+## Session 5 — Verification-only run (2026-07-10)
+- [x] Confirmed PR #3 (session 4's checkpoint) still open, NOT merged — CI green
+      (`build` x2 success), `mergeable_state: clean`
+- [x] Re-verified full check suite in a fresh container: npm install, build, lint, vitest,
+      clean `npm ci` — all PASS, no lockfile drift
+- [x] Continued on existing `feature/flowlens-mvp` branch (did not recreate from master,
+      since PR #3 is still open) and pushed this checkpoint to the same branch/PR
+
 ## Next-session backlog (see HANDOFF.md for the ranked, detailed version) — all optional,
 ## none blocking "MVP complete" status
 - [ ] Stripe checkout + webhook wiring

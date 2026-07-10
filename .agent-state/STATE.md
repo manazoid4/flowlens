@@ -1,6 +1,6 @@
 # FlowLens — STATE
 
-Last updated: 2026-07-09 (session 4, verification-only run; MVP scope complete, PR #1 and #2 merged)
+Last updated: 2026-07-10 (session 5, verification-only run; MVP scope complete, PR #3 open/CI-green, not yet merged)
 
 ## Mission
 Build FlowLens: a "Workflow Evidence & Process Intelligence Platform" — capture messy work,
@@ -61,6 +61,10 @@ Reversal condition: none expected; this is the correct pattern for npm-workspace
 - .agent-state/{RUNLOG,STATE,TODO,HANDOFF}.md only (verification-only session, no product
   code changes — DECISIONS.md untouched, no new durable decision made)
 
+## Files changed (session 4, session 5)
+- .agent-state/{RUNLOG,STATE,TODO,HANDOFF}.md only, both sessions (verification-only, no
+  product code changes — DECISIONS.md untouched, no new durable decision made either session)
+
 Prior session's files: everything else under the repo except .git internals — see git log
 (6 commits on feature/flowlens-mvp: bootstrap, pages, vercel-fix, docs+shells+tests+CI,
 sales/growth/playbooks, session-2 CI fix).
@@ -69,13 +73,35 @@ sales/growth/playbooks, session-2 CI fix).
 None. Open follow-ups are tracked as ranked next-session tasks in HANDOFF.md, not blockers.
 
 ## Next action
-Session 4's build-routine work and status email are both done (Resend id
-2da1e4de-81e6-45b7-a658-cd4d1c817a41). A new PR #3 (docs-only checkpoint,
-https://github.com/manazoid4/flowlens/pull/3) is open and subscribed for activity; a self
-check-in is scheduled ~1 hour out to confirm CI goes green, then re-arm until merged/closed.
-No other required next action — MVP scope is complete, PR #1 and PR #2 are merged, and CI is
-green on master. Optional deepening work is ranked in HANDOFF.md if a future session wants to
-continue.
+Session 5's build-routine work and status email are both done. PR #3
+(https://github.com/manazoid4/flowlens/pull/3) is still open from session 4, CI-green (both
+`build` checks success), `mergeable_state: clean` — it has simply not been merged by anyone
+yet, same as PR #1 and PR #2 sat unmerged for a while before eventually being merged outside
+these agent sessions. This session added its checkpoint commit onto the same branch/PR rather
+than opening a new PR #4, since #3 was still open. No other required next action — MVP scope
+is complete and CI is green. If PR #3 is still open after another session or two, a future
+session should raise with the user whether these routine sessions are expected to self-merge
+docs-only checkpoint PRs, rather than continuing to assume someone else will. Optional
+deepening work is ranked in HANDOFF.md if a future session wants to continue past MVP scope.
+
+## Verification status (session 5, this container)
+- `git status` at start: HEAD detached at `e65a38f`. `git fetch origin --prune` showed PR #3's
+  branch (`origin/feature/flowlens-mvp`, tip `79f4038`) still exists and is 2 commits ahead of
+  `origin/master` — PR #3 has NOT been merged (unlike PR #1/#2 which were merged by the time
+  the next session started).
+- GitHub MCP `list_pull_requests` (state=open): only PR #3, `mergeable_state: clean`.
+- GitHub MCP `pull_request_read get_check_runs` on PR #3: both `build` checks
+  `completed`/`success` (run 29058436271 and companion).
+- Checked out `origin/feature/flowlens-mvp` directly (did not recreate from master, since the
+  PR is still open) to continue on session 4's commits.
+- `npm install` (root): PASS (431 packages), `git status --short` clean afterward.
+- `npm run build`: PASS, all routes generated, no errors.
+- `npm run lint`: PASS (0 errors).
+- `npx vitest run` (apps/web): PASS (5/5 tests).
+- `rm -rf node_modules apps/*/node_modules packages/*/node_modules && npm ci`: PASS (431
+  packages, 0 EUSAGE/EBADENGINE), `git status --short` clean afterward — no lockfile drift.
+- No code changes made — pure verification pass per the routine's "already complete, no
+  make-work" instruction.
 
 ## Verification status (session 4, this container)
 - `git status` at start: HEAD detached at `e65a38f`. `git fetch origin master` -> origin/master

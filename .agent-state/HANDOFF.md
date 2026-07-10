@@ -1,6 +1,31 @@
 # FlowLens — HANDOFF
 
-Last updated: 2026-07-09, session 4 (verification-only run; MVP scope complete, PR #1 and #2 merged)
+Last updated: 2026-07-10, session 5 (verification-only run; MVP scope complete, PR #3 open/CI-green, not yet merged)
+
+## Current status (session 5 addendum — read this first, then earlier sessions' records below)
+Found HEAD detached at `e65a38f` ("Merge pull request #2"). Unlike sessions 3 and 4, this time
+`git fetch origin --prune` showed the previous session's PR is still open: PR #3
+(https://github.com/manazoid4/flowlens/pull/3, opened by session 4) has NOT been merged.
+`origin/feature/flowlens-mvp` is 2 commits ahead of `origin/master`. Confirmed via GitHub MCP:
+`list_pull_requests(state=open)` returns only PR #3; its `mergeable_state` is `clean` and both
+`build` check runs are `completed`/`success`. So PR #3 is fully green and mergeable — it just
+hasn't been merged by anyone yet.
+Because the PR is still open, this session did NOT recreate `feature/flowlens-mvp` from
+master (that convention only applies once the previous PR has actually merged). Instead it
+checked out the existing `origin/feature/flowlens-mvp` branch directly and added this
+session's checkpoint commit on top of session 4's, pushing to the same branch — which updates
+PR #3 in place rather than opening a redundant PR #4.
+TODO.md still shows all of phases 0-8 complete, only the same optional/non-blocking backlog
+remaining — so per the routine's "don't do make-work if already complete" instruction, this
+was another verify-and-report run: fresh `npm install`, `npm run build`, `npm run lint`,
+`npx vitest run`, and a clean-room `npm ci` — all PASS, zero drift. No product code changes.
+**Open question for a future session or the user**: PR #3 has now sat open, green, and
+mergeable across two sessions (4 and 5) with no session self-merging it. Prior sessions'
+docs assumed "someone else merges it eventually" (as happened with PR #1 and #2), but that
+assumption has not yet been re-confirmed this time. If PR #3 is still open next session too,
+that session should flag this explicitly rather than silently repeating the same "open a
+checkpoint, wait" pattern indefinitely.
+MVP status is unchanged: complete. The next-session backlog below is still accurate.
 
 ## Current status (session 4 addendum — read this first, then earlier sessions' records below)
 Found HEAD detached at `e65a38f` ("Merge pull request #2"); `git fetch origin master` confirmed
