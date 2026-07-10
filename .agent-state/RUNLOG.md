@@ -244,3 +244,40 @@ Append-only timestamped log of actions, commands, and outputs.
   adjust the cron cadence. Key passed only as a shell variable, never written to any file.
 - Session's build-routine work is complete. No push notification sent (session 5 already sent
   one for this exact finding; nothing new happened this session to justify another).
+
+## 2026-07-10T10:13Z — Session 7 (scheduled routine, remote container, repo at /home/user/flowlens)
+
+- Found HEAD detached at `e65a38f` (origin/master, PR #2's merge commit). `git fetch origin
+  master feature/flowlens-mvp` -> `origin/feature/flowlens-mvp` at `4bd32d8`, 9 commits ahead
+  of master — PR #3 (session 4's checkpoint PR) still open, 4th consecutive session to find it
+  unmerged.
+- `node -v` -> v22.22.2, `npm -v` -> 10.9.7.
+- `npm install` (root) -> PASS, 431 packages.
+- `npm run build` -> PASS, 42 static pages via Turbopack, no errors.
+- `npm run lint` -> PASS, 0 errors.
+- `cd apps/web && npx vitest run` -> PASS, 5/5 tests.
+- `rm -rf node_modules apps/*/node_modules packages/*/node_modules && npm ci` (clean-room,
+  matches CI exactly) -> PASS, 428 packages, `git status --short` clean afterward, no drift.
+- GitHub MCP `actions_list` on `master`: latest run `28976963747` (PR #2 merge commit) ->
+  `conclusion: success`; PR #3's own CI unchanged/green since session 6.
+- `list_triggers` (2 pages, ~35 entries): confirmed "FlowLens Build Resume"
+  (`trig_01MoN3zeUDqnnfWrQadCy35N`, cron `10 */5 * * *`) still `enabled: true`, created
+  2026-07-08T06:06:52Z, `last_fired_at` = this session's own firing (2026-07-10T10:10:29Z),
+  `next_run_at` 2026-07-10T15:10:00Z. Also found two independent `persistent_session_id`s each
+  running their own hourly `send_later` self-check-in chain on PR #3
+  (`session_01QSB1ys4Rgx5DnKvZUAgm7d` since 2026-07-08T21:27Z, `session_01J6hJRVm1TFGSa5httWhVjC`
+  since 2026-07-09T23:50Z) — roughly 20+ fire-and-re-arm cycles each, all "nothing changed,
+  re-arm silently." Combined, this is ~30-40 separate session spins over ~53h re-confirming an
+  already-known, already-reported state.
+- No code changes needed (MVP scope complete, only optional backlog remains per TODO.md) — pure
+  verification pass, per routine.
+- Updated `.agent-state/{STATE,TODO,HANDOFF}.md` with session 7 findings; `DECISIONS.md`
+  untouched (no new durable product decision this session).
+- Decision: re-notify the user. Session 5 sent one push notification about the cron
+  misconfiguration + stuck PR (~2026-07-10T02:18Z); session 6 (05:18Z) judged one quiet cycle
+  as acceptable and did not repeat it. This session is ~8h after the original notification with
+  zero observable user action (cron still enabled, PR still open, no human commits) — judged
+  that threshold crossed. Sent a second PushNotification recommending the user merge PR #3
+  and/or disable/lengthen the cron, noting either can be done on request. Did not merge the PR
+  or touch the trigger config myself (both need explicit authorization, not standing routine
+  authority).
