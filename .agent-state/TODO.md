@@ -83,6 +83,40 @@ Markers: [ ] not started, [~] in progress, [x] done+verified, [!] blocked, [?] n
       clean `npm ci` — all PASS, no drift
 - [x] Confirmed GitHub Actions run on the merge commit itself succeeded (run 28957352682)
 
+## Session 4 — Verification-only run (2026-07-09)
+- [x] Confirmed PR #2 (session 3's checkpoint) merged into master (commit e65a38f)
+- [x] Confirmed CI green on the resulting master tip (GitHub Actions run 28976963747,
+      conclusion success)
+- [x] Re-verified full check suite in a fresh container: npm install, build, lint, vitest —
+      all PASS, no lockfile drift
+- [x] Opened this session's own docs-only checkpoint PR and subscribed to its activity
+
+## Session 5 — Verification-only run (2026-07-10)
+- [x] Confirmed PR #3 (session 4's checkpoint) still open, NOT merged — CI green
+      (`build` x2 success), `mergeable_state: clean`
+- [x] Re-verified full check suite in a fresh container: npm install, build, lint, vitest,
+      clean `npm ci` — all PASS, no lockfile drift
+- [x] Continued on existing `feature/flowlens-mvp` branch (did not recreate from master,
+      since PR #3 is still open) and pushed this checkpoint to the same branch/PR
+
+## Session 6 — Verification-only run (2026-07-10)
+- [x] Confirmed PR #3 still open, NOT merged, CI still green (`build` x2 success on latest
+      push) — third consecutive session to find it unmerged
+- [x] Re-verified full check suite in a fresh container: `npm ci` (clean-room), build, lint,
+      vitest — all PASS, no lockfile drift
+- [x] Did not re-send a push notification about the recurring-cron/stuck-PR finding (already
+      surfaced to the user in session 5) — see HANDOFF.md for the escalation note instead
+
+## Session 7 — Verification-only run (2026-07-10)
+- [x] Confirmed PR #3 still open, NOT merged, CI still green — 4th consecutive session to
+      find it unmerged
+- [x] Re-verified full check suite in a fresh container: `npm ci` (clean-room), build, lint,
+      vitest — all PASS, no lockfile drift
+- [x] Re-confirmed via `list_triggers` that the "FlowLens Build Resume" cron and two parallel
+      hourly self-check-in loops are still running unattended since 2026-07-08
+- [x] Sent a second push notification (first was session 5, ~8h prior with zero user action
+      in between) recommending the user merge PR #3 and/or disable the cron — see HANDOFF.md
+
 ## Next-session backlog (see HANDOFF.md for the ranked, detailed version) — all optional,
 ## none blocking "MVP complete" status
 - [ ] Stripe checkout + webhook wiring
