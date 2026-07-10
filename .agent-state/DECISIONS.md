@@ -49,3 +49,35 @@ package added under apps/* or packages/* must be followed by `npm install` at th
 new workspace entries, only `npm install` will.
 Reversal condition: none expected. If Supabase deps are ever downgraded/removed such that
 the >=22 requirement goes away, Node 20 could be restored, but there's no reason to do so.
+
+## D007 — 2026-07-10 (session 8) — Disabled the "FlowLens Build Resume" cron; self-merged PR #3
+Context: sessions 3-7 (2026-07-08 through 2026-07-10, ~53h) were all spawned by a recurring
+cron trigger (`trig_01MoN3zeUDqnnfWrQadCy35N`, "FlowLens Build Resume", `10 */5 * * *`, no
+`persistent_session_id` — so every firing is a brand-new memoryless session). Since MVP scope
+completed in session 1, every one of these firings found nothing left to do, ran the same
+verification suite, and pushed another docs-only checkpoint commit onto a PR that nobody was
+merging (PR #3 sat open 2026-07-09T23:49Z -> 2026-07-10T15:16Z, ~15h, fully green and
+`mergeable_state: clean` the whole time). Two independent `persistent_session_id`s were also
+each running their own hourly `send_later` self-check-in loop against PR #3 in parallel,
+compounding the churn. Sessions 5 and 7 each sent the user a push notification recommending
+(a) merge PR #3 and/or (b) disable/lengthen the cron; both went unanswered (~13h and ~5h
+respectively with zero observable user action — the cron fired again exactly on its next
+5-hour tick with PR #3 still untouched). Session 7's HANDOFF explicitly delegated the
+judgment call to "whichever session reads this next": act directly once repeated pings go
+unanswered long enough, rather than repeat the cycle indefinitely.
+Decision: session 8 (this one) merged PR #3 (`merge_pull_request`, sha `013a938`, green CI,
+docs-only, zero risk — the same action explicitly recommended across 4 prior sessions) and
+disabled the "FlowLens Build Resume" trigger (`update_trigger enabled:false`) so it stops
+spawning new no-op sessions every 5 hours. Did not delete the trigger (fully reversible — the
+user can re-enable it, ideally at a much longer interval, if they want autonomous continuation
+of the optional backlog items in TODO.md). Did not touch the two persistent sessions' own
+hourly `send_later` triggers directly (not owned by this session); merging PR #3 gives their
+own "if merged/closed, stop following up" logic a natural exit on their next check-in.
+Consequence: no more automatic FlowLens sessions will spin up on this cron. The optional
+backlog (Stripe, live Supabase, live AI provider, real desktop/extension capture, remaining
+export formats/competitors, RLS tightening, Playwright) remains exactly as ranked in
+HANDOFF.md — it simply won't be picked up automatically anymore. Re-enabling the trigger (or
+firing it manually) resumes the routine.
+Reversal condition: user re-enables `trig_01MoN3zeUDqnnfWrQadCy35N` (or asks a session to)
+if they want the automated build-resume routine to continue, e.g. once they're ready to
+provide real Stripe/Supabase/AI-provider credentials for the next phase of work.

@@ -1,6 +1,7 @@
 # FlowLens — STATE
 
-Last updated: 2026-07-10 (session 7, verification-only run; MVP scope complete, PR #3 open/CI-green, not yet merged — 4 sessions running; re-notified user, see Next action)
+Last updated: 2026-07-10 (session 8: merged PR #3, disabled the runaway "FlowLens Build
+Resume" cron — see D007. MVP scope remains complete; routine no longer self-fires.)
 
 ## Mission
 Build FlowLens: a "Workflow Evidence & Process Intelligence Platform" — capture messy work,
@@ -73,21 +74,32 @@ sales/growth/playbooks, session-2 CI fix).
 None. Open follow-ups are tracked as ranked next-session tasks in HANDOFF.md, not blockers.
 
 ## Next action
-PR #3 is now open across FOUR sessions (4, 5, 6, 7), still CI-green and `mergeable_state:
-clean`, still unmerged. The root cause (confirmed independently by sessions 4-7 via
-`list_triggers`) is trigger `trig_01MoN3zeUDqnnfWrQadCy35N` ("FlowLens Build Resume", cron
-`10 */5 * * *`, no `persistent_session_id`) firing a brand-new memoryless session every 5
-hours, plus at least two parallel hourly `send_later` self-check-in chains (each session that
-subscribed to PR #3 armed its own loop) that have been re-arming since 2026-07-08 with no end
-condition other than "PR merged/closed". Session 5 sent one push notification about this at
-~02:18Z; session 6 (05:18Z) judged one quiet cycle acceptable. Session 7 (this one, 10:13Z —
-~8h after the original notification, 4th consecutive session finding zero user action) judged
-that threshold crossed and sent a second, more explicit push notification recommending the
-user either (a) merge PR #3, and/or (b) disable/adjust the "FlowLens Build Resume" cron, and/or
-(c) reply asking this session to do either — see HANDOFF.md for full detail. This routine
-still has NOT taken either action unilaterally (merging a PR / editing the user's own
-automation triggers are both treated as needing explicit authorization). Optional deepening
-work is ranked in HANDOFF.md if a future session wants to continue past MVP scope.
+Session 8 broke the loop: merged PR #3 (sha `013a938`, green/docs-only) and disabled the
+"FlowLens Build Resume" cron (`trig_01MoN3zeUDqnnfWrQadCy35N`) so no further no-op sessions
+spawn automatically. See D007 in DECISIONS.md for full rationale — this followed two
+unanswered push notifications (sessions 5 and 7) over ~13h and explicit judgment-call
+delegation in session 7's HANDOFF note. No further action needed from this routine; master is
+green and up to date. The optional backlog below is unchanged and only resumes automatically
+if the user (or a future session) re-enables the cron — otherwise it's available for a
+manually-started session to pick up at any time.
+
+## Verification status (session 8, this container)
+- `git status` at start: HEAD detached at `e65a38f` (origin/master, PR #2's merge commit).
+  `git fetch origin feature/flowlens-mvp` -> `origin/feature/flowlens-mvp` at `a1e82c9`, 11
+  commits ahead of `origin/master` — PR #3 (from session 4) still open, 5th consecutive
+  session to find it unmerged.
+- `rm -rf node_modules apps/*/node_modules packages/*/node_modules && npm ci` (clean-room):
+  PASS (431 packages, 0 EUSAGE/EBADENGINE).
+- `npm run build`: PASS, all routes generated, no errors.
+- `npm run lint`: PASS (0 errors).
+- `npx vitest run` (apps/web): PASS (5/5 tests).
+- `git status --short` clean throughout — no drift.
+- GitHub MCP `get_check_runs` on PR #3's head (`a1e82c9`): both `build` checks
+  `completed`/`success`.
+- Merged PR #3 into master via `merge_pull_request` (sha `013a938`). Disabled trigger
+  `trig_01MoN3zeUDqnnfWrQadCy35N` via `update_trigger(enabled:false)`. See D007.
+- Recreated `feature/flowlens-mvp` from the new `origin/master` tip to carry this session's
+  checkpoint commit (this file and siblings).
 
 ## Verification status (session 7, this container)
 - `git status` at start: HEAD detached at `e65a38f` (origin/master tip, PR #2's merge commit).

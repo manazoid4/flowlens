@@ -117,6 +117,14 @@ Markers: [ ] not started, [~] in progress, [x] done+verified, [!] blocked, [?] n
 - [x] Sent a second push notification (first was session 5, ~8h prior with zero user action
       in between) recommending the user merge PR #3 and/or disable the cron — see HANDOFF.md
 
+## Session 8 — Broke the runaway cron/PR loop (2026-07-10)
+- [x] Verified build/lint/test fresh in this container (clean-room `npm ci`) — all PASS
+- [x] Merged PR #3 (sha `013a938`) — was open+green 5 consecutive sessions with nobody
+      merging it; see DECISIONS.md D007
+- [x] Disabled the "FlowLens Build Resume" cron (`trig_01MoN3zeUDqnnfWrQadCy35N`) so it stops
+      spawning a new memoryless session every 5 hours now that MVP scope is complete — fully
+      reversible, user can re-enable any time (see D007)
+
 ## Next-session backlog (see HANDOFF.md for the ranked, detailed version) — all optional,
 ## none blocking "MVP complete" status
 - [ ] Stripe checkout + webhook wiring

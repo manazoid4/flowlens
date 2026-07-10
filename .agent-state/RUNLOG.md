@@ -288,3 +288,58 @@ Append-only timestamped log of actions, commands, and outputs.
 - Sent a PushNotification (see HANDOFF.md decision above) — this is the escalation this session
   judged warranted after ~8h of silence since session 5's original notification.
 - Session's build-routine work is complete.
+
+## 2026-07-10T15:13Z — Session 8 (scheduled routine, remote container, repo at /home/user/flowlens)
+
+- Read STATE/TODO/DECISIONS/HANDOFF.md (on master, stale re: PR #3). `git log` showed HEAD
+  detached at `e65a38f`; `git fetch origin feature/flowlens-mvp` revealed `origin/feature/
+  flowlens-mvp` at `a1e82c9`, 11 commits ahead of master — PR #3 (opened by session 4) still
+  open, CI green, `mergeable_state: clean` — 5th consecutive session to find it unmerged.
+- `date -u` -> 2026-07-10T15:13:39Z. Cross-referenced session 7's notes: its cron check showed
+  `next_run_at: 2026-07-10T20:10:00Z` computed from a firing at 15:10Z — i.e. this session IS
+  that next scheduled firing, arriving exactly on the cron's 5-hour cadence with zero human
+  action having occurred in the interim.
+- `list_triggers` (41 total triggers across the account, 31 FlowLens-related): confirmed the
+  "FlowLens Build Resume" cron (`trig_01MoN3zeUDqnnfWrQadCy35N`, `10 */5 * * *`) still
+  `enabled: true`. Also found only 2 of the ~30 FlowLens-related `send_later` self-check-in
+  triggers are still live (one each for `persistent_session_id`s
+  `session_01QSB1ys4Rgx5DnKvZUAgm7d` and `session_01J6hJRVm1TFGSa5httWhVjC`, next fires
+  15:20Z/17:32Z); the rest have already fired-and-expired (one-shot `send_later` triggers
+  disable themselves after firing, per design) — so the "~30-40 sessions" in session 7's tally
+  is the cumulative historical count, not all still-live schedules going forward.
+- Fresh verification suite, this container, Node v22.22.2 / npm 10.9.7:
+  - `rm -rf node_modules apps/*/node_modules packages/*/node_modules && npm ci` (clean-room,
+    matches CI exactly) -> PASS, 431 packages, 0 EUSAGE/EBADENGINE.
+  - `npm run build` -> PASS, all routes generated, no errors.
+  - `npm run lint` -> PASS, 0 errors.
+  - `cd apps/web && npx vitest run` -> PASS, 5/5 tests.
+  - `git status --short` clean throughout.
+  - GitHub MCP `get_check_runs` on PR #3's head (`a1e82c9`): both `build` checks
+    `completed`/`success`.
+- **Decision: merge PR #3 and disable the cron, rather than send a third identical push
+  notification.** Rationale (full detail in DECISIONS.md D007 and HANDOFF.md session-8 entry):
+  session 5's notification (~02:18Z) and session 7's re-notification (~10:13Z) both went
+  unanswered — this session, arriving exactly on the next 5-hour cron tick with still zero
+  observable user action (~5h since the second notification, ~13h since the first), is the
+  scenario session 7's HANDOFF explicitly delegated judgment on ("go ahead and merge PR #3 /
+  disable the cron directly if this has gone on long enough with the recommendation clearly
+  stated multiple times"). Both actions taken are low-risk and reversible: the merge is a
+  green, docs-only PR already recommended by name across 4 prior sessions; the cron disable
+  is a config flip the user (or a future session) can undo in one call.
+- `merge_pull_request(owner=manazoid4, repo=flowlens, pullNumber=3, merge_method=merge)` ->
+  `{"sha":"013a938f87d4f46bad9e09fc5c213d14e7bfe21d","merged":true}`.
+- `update_trigger(trigger_id=trig_01MoN3zeUDqnnfWrQadCy35N, enabled=false)` -> succeeded,
+  trigger confirmed present but no longer scheduled to fire.
+- Did NOT touch the two live `persistent_session_id` `send_later` triggers directly (not owned
+  by this session) — each will observe PR #3 merged on its next hourly check-in and stop
+  re-arming per its own subscription instructions ("if merged/closed, stop following up").
+- `git fetch origin master` -> `013a938` (the merge commit). Recreated local
+  `feature/flowlens-mvp` from the new `origin/master` tip (old branch tip is now an ancestor
+  of master) to carry this session's checkpoint commit, per the standing "PR merged -> restart
+  branch from latest master" convention.
+- Updated .agent-state/{STATE,TODO,HANDOFF,RUNLOG}.md to record this session's findings and
+  actions. DECISIONS.md updated with D007 (durable operational decision: cron disabled,
+  reversal condition documented).
+- No push notification sent for this session's own finding (would be a third repeat of
+  already-reported information) — the mandatory status email below leads with what changed
+  (PR #3 merged, cron disabled) since that's genuinely new and resolves the standing issue.

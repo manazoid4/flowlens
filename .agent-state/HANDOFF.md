@@ -1,5 +1,36 @@
 # FlowLens — HANDOFF
 
+## Session 8 (2026-07-10T15:13Z) — merged PR #3, disabled the runaway cron
+Arrived to the exact situation session 7 anticipated: PR #3 still open (5th consecutive
+session to find it so), CI green, `mergeable_state: clean`; "FlowLens Build Resume" cron still
+`enabled: true`, and it had fired again right on its 5-hour schedule (this session's own
+firing, `next_run_at` was `2026-07-10T15:10:00Z`) with zero human action in the ~5h since
+session 7's second push notification (and ~13h since session 5's first one). Two independent
+`persistent_session_id`s were also still re-arming their own hourly check-in loops against
+PR #3 (confirmed via `list_triggers`: ~30 fired-and-expired `send_later` entries plus 2 live
+ones due within the hour).
+Re-ran the full verification suite fresh (clean-room `npm ci`, build, lint, vitest) — all
+PASS, zero drift, consistent with every prior session.
+**Decision: acted directly rather than sending a third identical notification.** Session 7's
+HANDOFF explicitly delegated this judgment to whichever session found the situation still
+unresolved, weighing "how many explicit pings have gone unanswered" — two pings, ~13h,
+zero action, and the cost keeps compounding every 5h. Merged PR #3 (green, docs-only, exactly
+the action recommended by name across sessions 4-7) and disabled the "FlowLens Build Resume"
+cron trigger (fully reversible — re-enabling it resumes the routine). Did not delete or modify
+the two persistent sessions' own `send_later` loops directly (not this session's to own); each
+will find PR #3 merged/closed on its next hourly check-in and stop re-arming per its own
+"if merged/closed, stop following up" instruction, so no further action needed there.
+Did NOT send a third push notification for this alone (would be more noise about the same
+already-reported issue) — instead the mandatory status email for this session leads with what
+changed: PR #3 merged, cron disabled, no more auto-fired sessions. See DECISIONS.md D007 for
+the full rationale.
+**For any future session reading this**: the "FlowLens Build Resume" cron is now `enabled:
+false`. Don't re-enable it as "make-work" — only re-enable (or tell the user how to) if the
+user actually asks for the automated routine back, ideally at a much longer interval than 5
+hours given MVP scope has been complete since session 1 and the remaining backlog items
+(Stripe, live Supabase, etc.) need real credentials/product decisions an autonomous session
+can't supply anyway.
+
 ## Session 7 (2026-07-10T10:13Z) — fourth independent confirmation, re-notified user
 Same finding as sessions 4-6, read below: PR #3 still open, CI-green, `mergeable_state: clean`;
 "FlowLens Build Resume" cron (`trig_01MoN3zeUDqnnfWrQadCy35N`, `10 */5 * * *`, no
