@@ -170,8 +170,15 @@ Append-only timestamped log of actions, commands, and outputs.
 - Committed this checkpoint on `feature/flowlens-mvp` and pushed — this adds to the existing
   open PR #3 rather than opening a new PR #4, since #3 is still open and its branch is the
   right target.
-- Sent session status email via Resend API (`curl`, custom User-Agent) — see email send step
-  below for the response id.
+- Subscribed to PR #3 activity; confirmed a new CI run kicked off on the checkpoint push
+  (`in_progress` at check time, docs-only diff, expected green like prior runs) and no
+  unresolved review comments exist. Scheduled a self check-in ~1 hour out (`send_later`) to
+  confirm the new run went green and to watch for merge activity.
+- Sent session status email via Resend API (`curl`, custom User-Agent) -> HTTP response
+  `{"id":"2cd33e26-7dc6-485d-8b61-963ee6f3a532"}`, confirming delivery accepted. Key passed
+  only as a shell variable, never written to any file. Email flagged that PR #3 has now sat
+  open/green/unmerged across two sessions with no session self-merging it.
 - Session's build-routine work is complete. Remaining open item: PR #3 is open, CI-green,
   mergeable — needs a human (or a future automated step outside this routine) to actually
-  merge it, same as PR #1/#2 eventually were.
+  merge it, same as PR #1/#2 eventually were. Flagged in HANDOFF.md as worth escalating if
+  it's still open next session.
