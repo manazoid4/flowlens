@@ -1,6 +1,27 @@
 # FlowLens — HANDOFF
 
-Last updated: 2026-07-10, session 5 (verification-only run; MVP scope complete, PR #3 open/CI-green, not yet merged)
+Last updated: 2026-07-10, session 4's 1hr self check-in (root cause of repeated sessions identified — see note below)
+
+## Note from session 4's PR #3 check-in loop (2026-07-10T01:52Z)
+Checked `list_triggers` while investigating why PR #3 keeps getting new checkpoint commits
+from sessions that don't recognize each other: there is a recurring Routine, **"FlowLens
+Build Resume"** (`trig_01MoN3zeUDqnnfWrQadCy35N`, cron `10 */5 * * *` — every 5 hours, no
+`persistent_session_id`, so each firing spins up a **brand-new session** with no memory of
+prior runs). That's the root cause of sessions 3/4/5 each independently re-reading
+`.agent-state/`, finding the MVP "complete," running the same verification suite, and pushing
+another docs-only checkpoint commit — session 5 correctly guessed this pattern but didn't have
+visibility into the trigger config to confirm it.
+Consequence: as long as (a) this cron stays enabled and (b) nobody merges PR #3, it will keep
+firing every 5 hours indefinitely, each time spawning a fresh session that repeats this same
+"verify, checkpoint, open/extend a PR" cycle forever — harmless to the product (no code
+changes, all checks pass) but wasteful, and it explains the repeated status emails. **This is
+worth surfacing to the user**: either merge PR #3 (it's green and `mergeable_state: clean`,
+purely a docs update) so future firings start clean from master again, or reduce/disable the
+cron now that MVP scope is done and only optional backlog work remains.
+Separately, each PR-babysitting session also arms its own hourly `send_later` self-check-in
+(via `create_trigger`/`send_later`), so at this moment there are multiple independent hourly
+check-in loops watching PR #3 in parallel (one per session that opened/extended it) — this is
+redundant but not harmful, each just re-checks status and re-arms silently when unchanged.
 
 ## Current status (session 5 addendum — read this first, then earlier sessions' records below)
 Found HEAD detached at `e65a38f` ("Merge pull request #2"). Unlike sessions 3 and 4, this time
